@@ -1,0 +1,41 @@
+# Credentials and local configuration
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+*.credentials.*
+credentials.*
+secrets.*
+
+# Models, generated data, logs, and caches
+*.gguf
+*.safetensors
+*.bin
+*.onnx
+models/
+data/
+logs/
+temp/
+cache/
+backups/
+node_modules/
+.venv/
+__pycache__/
+
+# Personal/payment media and editor files
+pay/
+payment/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.mp3
+*.wav
+*.mp4
+*.mov
+.DS_Store
+Thumbs.db
+

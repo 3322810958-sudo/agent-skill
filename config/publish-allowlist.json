@@ -1,0 +1,22 @@
+{
+  "repositoryRoot": "D:\\CodexLocalAI\\repositories\\agent-skill",
+  "plugins": [
+    {
+      "name": "local-ai-router",
+      "source": "D:\\CodexLocalAI\\plugins\\local-ai-router"
+    },
+    {
+      "name": "intent-refiner",
+      "source": "D:\\CodexLocalAI\\plugins\\intent-refiner"
+    }
+  ],
+  "allowedExtensions": [
+    ".json",
+    ".md",
+    ".ps1",
+    ".yaml",
+    ".yml",
+    ".txt"
+  ]
+}
+
