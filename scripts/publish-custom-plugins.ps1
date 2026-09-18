@@ -21,8 +21,15 @@ function Assert-ChildPath([string]$Parent, [string]$Child, [string]$Label) {
 }
 
 function Invoke-Git([string[]]$Arguments, [switch]$AllowFailure) {
-    $output = & git @Arguments 2>&1
-    $code = $LASTEXITCODE
+    $previousErrorAction = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $output = & git @Arguments 2>&1
+        $code = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $previousErrorAction
+    }
     if ($code -ne 0 -and -not $AllowFailure) {
         Fail "Git command failed: git $($Arguments -join ' ')"
     }
