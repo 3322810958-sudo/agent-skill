@@ -1,0 +1,18 @@
+{
+  "name": "intent-refiner",
+  "version": "0.1.0",
+  "description": "理解口语需求，必要时澄清，后台整理后直接执行。",
+  "author": {
+    "name": "Local developer"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "需求澄清与话术优化",
+    "shortDescription": "保留原意，必要时追问，后台优化后直接执行。",
+    "longDescription": "适用于口语、零散需求和连续对话。结合上下文识别目标，只追问影响结果的关键信息，内部整理为可执行要求，然后完成原任务。由当前 AI 执行，不需要额外 API 或常驻服务；不接管其他应用的输入框。",
+    "developerName": "Local developer",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": ["帮我理解并完成接下来的需求，只在关键信息不明确时追问。"]
+  }
+}

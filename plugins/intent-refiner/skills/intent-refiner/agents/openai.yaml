@@ -1,0 +1,6 @@
+interface:
+  display_name: "需求澄清与话术优化"
+  short_description: "理解口语和连续对话，仅追问关键缺失信息，后台整理需求后直接完成任务"
+  default_prompt: "使用 $intent-refiner 理解并完成我的需求，仅在关键信息不明确时追问。"
+policy:
+  allow_implicit_invocation: true

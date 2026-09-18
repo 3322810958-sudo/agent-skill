@@ -1,0 +1,18 @@
+{
+  "name": "local-ai-router",
+  "version": "0.1.0",
+  "description": "Route bounded drafting and bulk text work to private local models, then return compact results to Codex.",
+  "author": {
+    "name": "28568"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Local AI Router",
+    "shortDescription": "Offload drafts and bulk text work to local AI.",
+    "longDescription": "Uses the private Qwen coder and DeepSeek reasoner in D:\\CodexLocalAI for bounded drafting, decomposition, extraction, and summarization, returning compact results for Codex review.",
+    "developerName": "28568",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Use the local model for suitable bulk work, then review the result and give me the final answer."
+  }
+}
