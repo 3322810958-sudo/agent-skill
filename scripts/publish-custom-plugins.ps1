@@ -36,7 +36,7 @@ function Test-PluginManifest([string]$PluginRoot, [string]$ExpectedName) {
     }
 
     try {
-        $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+        $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     }
     catch {
         Fail "Plugin '$ExpectedName' has invalid plugin.json."
@@ -99,7 +99,7 @@ function Test-PublishableFiles(
             Fail "Plugin file exceeds the 2 MiB publication limit: $relative"
         }
 
-        $content = Get-Content -LiteralPath $file.FullName -Raw -ErrorAction Stop
+        $content = Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8 -ErrorAction Stop
         foreach ($rule in $secretRules.GetEnumerator()) {
             if ($content -match $rule.Value) {
                 Fail "Sensitive-content rule '$($rule.Key)' matched: $relative"
@@ -115,7 +115,7 @@ if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
     Fail 'Publication allowlist is missing.'
 }
 
-$config = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+$config = Get-Content -LiteralPath $configPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $expectedRepo = [System.IO.Path]::GetFullPath([string]$config.repositoryRoot)
 if ($repoRoot.TrimEnd('\') -ne $expectedRepo.TrimEnd('\')) {
     Fail 'This script is not running from the approved repository path.'
@@ -200,4 +200,3 @@ finally {
         Remove-Item -LiteralPath $stagingRoot -Recurse -Force
     }
 }
-
