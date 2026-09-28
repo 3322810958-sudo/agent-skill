@@ -8,12 +8,17 @@
     {
       "name": "intent-refiner",
       "source": "D:\\CodexLocalAI\\plugins\\intent-refiner"
+    },
+    {
+      "name": "worldbox-ledger",
+      "source": "D:\\CodexLocalAI\\plugins\\worldbox-ledger"
     }
   ],
   "allowedExtensions": [
     ".json",
     ".md",
     ".ps1",
+    ".py",
     ".yaml",
     ".yml",
     ".txt"
