@@ -1,6 +1,6 @@
 ---
 name: worldbox-ledger
-description: 本地读取 WorldBox（世界盒子）的游戏目录、存档、世界历史、NPC姓名与属性、国王和任期；保存独立证据快照并比较变化。适用于 WorldBox 存档分析、人物查询、造物主操作核对及后续编辑需求评估。当前实现不修改游戏或存档。
+description: 本地读取 WorldBox（世界盒子）的存档、历史、NPC属性与统治任期；按需自动同步保存快照并比较变化，支持基于实际证据的历史试写。不会修改游戏或存档。
 ---
 
 # World-Box 记录助手
@@ -35,6 +35,14 @@ For a supplied game directory, save its absolute path outside the plugin using `
 
 The snapshot report includes checksum validation, naming/field coverage, readable histories and people, and lossless JSON for relevant entities. Inspect the returned report and resolve warnings before claiming success. An active save/WAL or a change during reading is an error, not a valid snapshot; ask the user to finish saving and retry once.
 
-This is a Codex agent plugin, not an in-game mod. It does not monitor continuously or read game RAM. Do not imply automatic observation between user requests. Use existing workflows to analyze screenshots separately and label screenshot-only evidence.
+This is a Codex agent plugin, not an in-game mod. It does not read game RAM or capture input. Continuous monitoring requires the separately started local watcher described below. Use existing workflows to analyze screenshots separately and label screenshot-only evidence.
+
+## Automatic save synchronization
+
+When the user requests automatic synchronization, use `../../scripts/worldbox-sync.ps1 -Action Start` with their established local profile. `-Action Status` checks its heartbeat; `-Action Stop` requests a graceful exit. The watcher uses the configured manual-save root, polls every 2 seconds, waits 6 seconds without file changes, and invokes the same read-only verified snapshot path. Rapid consecutive saves may coalesce. It retries temporarily incomplete/locked sources, does not overwrite old snapshots, and writes a managed `最新记录.md` index plus report-side `.sync` state. A changed/missing world identity or rewound world time starts a new history segment without claiming a valid forward comparison. No automatic login startup is installed; the process must be restarted after reboot. Only claim it is active after checking a recent heartbeat AND a successfully exported real snapshot. For implementation details and limitations read [synchronization](references/synchronization.md).
+
+## Historical fiction from evidence
+
+Confirm whether a requested span means the world's first years or the most recent years. Extract facts before drafting. Logs use world-time units; yearly statistics use a separate yearly index and can be interval aggregates. Never convert both with the same rule. Do not turn coarse samples into exact annual populations, individual deaths or player actions. If the requested period has no retained named events, say so and write a clearly labeled literary prologue using supported ecology/statistics, or clarify a different range. Atmospheric imagery, narrator and dialogue are fictional devices and must be identified as such; no fabricated NPC names, coronations, wars or causes of death may be presented as save history. Keep prose and evidence notes separate, link the source snapshot/hash, and preserve that binding when later saves update the latest-record index. Synchronizing evidence does not automatically rewrite a finished story.
 
 Requests to modify stats go to [future editing boundary](references/future-editing.md). This release exposes no working apply/write command. Permission for later extension does not mean a specific mutation has already been tested or requested. Development of future code follows the user's local-model and review requirements.

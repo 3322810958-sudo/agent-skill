@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import os
+import re
 from pathlib import Path
 import sqlite3
 import sys
@@ -181,7 +182,7 @@ def discover(game_dir=None, saves_root=None, include_autosaves=False):
 def read_database(path):
     path = Path(path)
     if not path.exists():
-        return {'present': False, 'events': [], 'archived_kingdoms': [], 'tables': []}
+        return {'present': False, 'events': [], 'archived_kingdoms': [], 'tables': [], 'yearly_raw': {}}
     for suffix in ('-wal', '-journal'):
         if Path(str(path) + suffix).exists():
             raise LedgerError('Active SQLite sidecar detected; finish saving before reading')
@@ -197,20 +198,25 @@ def read_database(path):
         if integrity != ['ok']:
             raise LedgerError('SQLite integrity check failed')
         tables = db.execute("SELECT name, sql FROM sqlite_master WHERE type='table' ORDER BY name").fetchall()
-        result = {'present': True, 'integrity_check': integrity, 'tables': [], 'events': [], 'archived_kingdoms': []}
+        result = {'present': True, 'integrity_check': integrity, 'tables': [], 'events': [], 'archived_kingdoms': [], 'yearly_raw': {}}
         for name, sql in tables:
             if sql and 'VIRTUAL TABLE' in sql.upper():
                 raise LedgerError('Unexpected virtual table in save database')
             quoted = '"' + name.replace('"', '""') + '"'
             n = db.execute('SELECT COUNT(*) FROM ' + quoted).fetchone()[0]
             result['tables'].append({'name': name, 'rows': n, 'schema': sql})
-            if name not in {'WorldLogMessage', 'KingdomData'}:
+            yearly = bool(re.fullmatch(r'(World|Kingdom|City)Yearly(1|5|10|50|100|500|1000|5000|10000)', name))
+            if name not in {'WorldLogMessage', 'KingdomData'} and not yearly:
                 continue
             if n > 200000:
                 raise LedgerError('Event/archive row limit reached')
             cur = db.execute('SELECT * FROM ' + quoted)
             cols = [x[0] for x in cur.description]
-            result['events' if name == 'WorldLogMessage' else 'archived_kingdoms'] = [dict(zip(cols, row)) for row in cur]
+            records = [dict(zip(cols, row)) for row in cur]
+            if yearly:
+                result['yearly_raw'][name] = records
+            else:
+                result['events' if name == 'WorldLogMessage' else 'archived_kingdoms'] = records
         return result
     finally:
         db.close()
@@ -460,9 +466,9 @@ def compare(before, after):
 
 
 def capabilities():
-    return {'plugin': 'worldbox-ledger', 'version': '0.1.0', 'read_only_game': True,
-            'implemented': ['discover', 'snapshot', 'npc', 'compare', 'note', 'configure'],
-            'game_write_enabled': False, 'runtime_memory_access': False, 'continuous_monitor': False,
+    return {'plugin': 'worldbox-ledger', 'version': '0.2.0', 'read_only_game': True,
+            'implemented': ['discover', 'snapshot', 'npc', 'compare', 'note', 'configure', 'watch_via_worldbox_sync.py'],
+            'game_write_enabled': False, 'runtime_memory_access': False, 'continuous_monitor': 'separate opt-in local process',
             'generates_missing_names': False, 'network_required': False}
 
 

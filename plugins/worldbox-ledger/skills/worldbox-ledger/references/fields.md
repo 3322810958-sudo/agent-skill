@@ -18,6 +18,9 @@ Supported verified save schemas: `saveVersion` 13 and 17. Unknown versions may b
 | lover / parent_id_1 / parent_id_2 | exact actor references; preserve unresolved IDs |
 | age_overgrowth | age offset; only derive age when source world time, created_time and offset are all explicitly present |
 | past_rulers | repeated office terms, not a deduplicated person list; can include current ruler |
+| database.yearly_raw | raw World/Kingdom/City yearly tables; timestamp is a yearly index, not WorldLogMessage world-time units; keep interval tables separate |
+
+For locally inspected 0.50.6 statistics, coarse yearly tables are produced by database triggers: some fields use maxima, while population, trees and vegetation use rounded averages over earlier input rows. These can be nested interval aggregates and omit unchanged values as SQL NULL. A row labeled 50 is not automatically the exact population on the last day of year 50. Do not sum cumulative maxima, combine overlapping intervals or assume NULL is zero. The reader preserves raw table rows; it does not silently reconstruct the game's chart interpolation. Confirm trigger semantics from the particular source database for quantitative historical claims.
 
 Locally verified 0.50.6 rules (independent inspection of the installed assembly, no game code redistributed):
 

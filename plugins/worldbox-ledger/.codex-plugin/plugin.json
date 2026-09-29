@@ -1,6 +1,6 @@
 {
   "name": "worldbox-ledger",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "本地只读解析 WorldBox 存档、世界历史与人物档案，保留证据并比较保存快照。",
   "author": {
     "name": "Local developer"
@@ -8,7 +8,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "World-Box 记录助手",
-    "shortDescription": "读取存档、历史事件、NPC属性与保存前后的变化。",
+    "shortDescription": "自动同步已保存的世界、历史事件、NPC属性与变化。",
     "longDescription": "定位本地游戏和存档，读取人物姓名、属性、关系、统治任期与世界事件。支持独立快照、差异比较和注明来源的操作备注。当前版本不会改写游戏或存档，不读取运行内存，也不会自动生成缺失姓名；为后续受控编辑预留扩展边界。",
     "developerName": "Local developer",
     "category": "Productivity",
